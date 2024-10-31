@@ -1,0 +1,6 @@
+cd Users/omaromeir/Documents/GitHub/
+source venv/bin/activate
+flask run
+
+cd svelte-app
+npm run dev
