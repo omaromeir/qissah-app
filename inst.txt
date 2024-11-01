@@ -4,3 +4,5 @@ flask run
 
 cd svelte-app
 npm run dev
+export LANGCHAIN_API_KEY="your_langchain_api_key"
+export OPENAI_API_KEY=""
