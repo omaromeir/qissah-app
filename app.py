@@ -41,7 +41,7 @@ def generate_story():
 
         # Define messages based on the user inputs
         messages = [
-            SystemMessage(content="This is a children's story in Arabic. Make it simple and clear. Make it very short. It must be in simple, standard Arabic."),
+            SystemMessage(content="This is a children's story in Arabic. Make it simple and clear. Make it very short. It must be appropriate for 9-10 year olds. It must be in simple, standard Arabic."),
             HumanMessage(content=f"Write a story about {characters} in a {theme}. Include {otherThings}."),
         ]
 
