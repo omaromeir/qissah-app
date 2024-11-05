@@ -30,6 +30,30 @@
       console.error('Error fetching story:', error);
     }
   }
+
+  let imagePath = "";
+
+  async function fetchImage() {
+      const response = await fetch("/api/picture", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+              theme: theme,
+              characters: characters,
+              otherThings: otherThings
+          })
+      });
+      const data = await response.json();
+
+      if (data.image_path) {
+          imagePath = data.image_path;
+      } else {
+          console.error("Error generating image:", data.error);
+      }
+  }
+
+fetchImage();
+
 </script>
 
 <style>
