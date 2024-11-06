@@ -17,9 +17,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the application code
 COPY . .
 
-# Copy the public directory containing built static files
-COPY public/ /app/public/
-
 # Expose the port that Flask runs on
 EXPOSE 5000
 
