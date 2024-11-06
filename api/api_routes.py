@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_community.utilities.dalle_image_generator import DallEAPIWrapper
-from langchain import OpenAI, PromptTemplate
+from langchain_core.prompts import PromptTemplate
 import os
 
 api_blueprint = Blueprint('api', __name__)
@@ -62,16 +62,15 @@ def generate_image():
 
     # Generate the image URL using DALL-E
     try:
-        # Initialize the LLM and prompt template for image prompt generation
-        llm = OpenAI(temperature=0.9)
-        prompt = PromptTemplate(
-            input_variables=["image_desc"],
-            template="Generate a concise, detailed prompt (1000 characters or less) to generate an image, without any writing, with a sketch appearance, that is appropriate for kids, based on the following description: {image_desc}",
-        )
-        chain = prompt | llm
+        # Initialize the chat-based LLM model
+        llm = ChatOpenAI(model="gpt-4", temperature=0.9)  # Update with your actual model if different
 
-        # Generate the detailed prompt
-        generated_prompt = chain.invoke(image_desc)
+        # Create the prompt for generating an image
+        prompt_text = f"Generate a concise, detailed prompt (1000 characters or less) to generate an image, without any writing, with a sketch appearance, that is appropriate for kids, based on the following description: {image_desc}"
+        
+        # Generate the prompt response using the model
+        response = llm.invoke([{"role": "user", "content": prompt_text}])
+        generated_prompt = response.content
         print("Generated prompt for image:", generated_prompt)
 
         # Use the generated prompt with DALL-E API

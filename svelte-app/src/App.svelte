@@ -17,7 +17,7 @@
     loadingStory = true;
     story = ''; // Clear previous story
     try {
-      const response = await fetch('http://127.0.0.1:5000/api/story', {
+      const response = await fetch('/api/story', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -50,7 +50,7 @@
     loadingImage = true;
     imagePath = ''; // Clear previous image
     try {
-      const response = await fetch('http://127.0.0.1:5000/api/generate_image', {
+      const response = await fetch('/api/generate_image', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
