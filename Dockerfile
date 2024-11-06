@@ -4,9 +4,9 @@ FROM python:3.12-slim
 # Set the working directory in the container
 WORKDIR /app
 
-# Install curl for debugging purposes and gunicorn for production server
+# Install system dependencies
 RUN apt-get update && \
-    apt-get install -y curl && \
+    apt-get install -y --no-install-recommends curl && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -17,12 +17,15 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the application code
 COPY . .
 
+# Copy the public directory containing built static files
+COPY public/ /app/public/
+
 # Expose the port that Flask runs on
 EXPOSE 5000
 
-# Set environment variables (Railway can override these with its own variables)
+# Set environment variables for Flask
 ENV FLASK_APP=app.py
 ENV FLASK_RUN_HOST=0.0.0.0
 
-# Start the Flask app with gunicorn
+# Run the application with gunicorn for production
 CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "app:app"]
