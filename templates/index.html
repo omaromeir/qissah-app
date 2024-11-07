@@ -184,6 +184,13 @@ select:focus {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Subtle shadow for a polished look */
     margin-top: 10px; /* Add space above the image */
   }
+
+  .validation-message {
+      color: red;
+      margin-top: 10px;
+    }
+
+
   </style>
 </head>
 <body>
@@ -227,7 +234,7 @@ select:focus {
     <input type="text" x-model="imageDesc" id="imageDesc" placeholder="وصف الصورة..." />
 
     <button @click="generateStoryAndImage">توليد القصة والصورة</button>
-
+    <div x-show="validationMessage" class="validation-message" x-text="validationMessage"></div>
     <div x-show="loadingStory" class="loading-spinner"></div>
     <template x-if="story && !loadingStory">
       <div class="story-output">
@@ -256,6 +263,17 @@ select:focus {
       imagePath: '',
       loadingStory: false,
       loadingImage: false,
+      validationMessage: '', // New property for validation feedback
+
+      validateInputs() {
+        // Check if any required field is empty
+        if (!this.theme || !this.characterType || !this.characters || !this.storyLocation || !this.storyMoral || !this.imageDesc) {
+          this.validationMessage = 'يجب ملء جميع الحقول لتوليد القصة.';
+          return false;
+        }
+        this.validationMessage = ''; // Clear the message if validation passes
+        return true;
+      },
 
       async getStory() {
         this.loadingStory = true;
@@ -315,12 +333,18 @@ select:focus {
       },
 
       async generateStoryAndImage() {
+        // Validate inputs before proceeding
+        if (!this.validateInputs()) {
+          return; // Stop if validation fails
+        }
+        
         await this.getStory();
         await this.fetchImage();
       }
     };
   }
 </script>
+
 
 </body>
 </html>
