@@ -31,13 +31,57 @@ allam_model = ModelInference(
     
 )
 
-
-# Initialize a Sentence Transformer model for embeddings
-embedding_model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
-
 @api_blueprint.route('/api/story', methods=['POST'])
 def generate_story():
     try:
+        # Extract child input details from the request
+        data = request.get_json()
+        
+        # Check if necessary fields are provided
+        required_fields = ['theme', 'characterType', 'characterCount', 'characters', 'storyLocation', 'storyMoral', 'otherThings']
+        if not all(field in data for field in required_fields):
+            return jsonify({'error': 'Invalid request format, missing data'}), 400
+
+        # Extract inputs from the request
+        theme = data['theme']
+        characterType = data['characterType']
+        characterCount = data['characterCount']
+        characters = data['characters']
+        storyLocation = data['storyLocation']
+        storyMoral = data['storyMoral']
+        otherThings = data['otherThings']
+
+        # Define the structured prompt template
+        prompt_template = f"""
+        بناءً على التفاصيل التالية:
+        - الموضوع: {theme}
+        - نوع الشخصية: {characterType}
+        - عدد الشخصيات: {characterCount}
+        - أسماء الشخصيات: {characters}
+        - البيئة: {storyLocation}
+        - تفاصيل إضافية: {storyMoral}, {otherThings}
+
+        اكتب قصة باللغة العربية لطفل يتراوح عمره بين 8 و11 سنة، مع التركيز على الثقافة العربية.
+        استخدم التفاصيل المدخلة من قبل الطفل لجعل القصة قريبة وممتعة له.
+
+        ابدأ بعبارة افتتاحية جذابة ومبتكرة تثير فضول الطفل وتشده لمواصلة القراءة، بحيث تتجنب العبارات التقليدية التي تُستخدم عادة في القصص مثل "كان ياماكان".  قدم الشخصيات وحدد البيئة، ثم ابني الأحداث معطيات الطفل وأضف تفاصيل لتعميق الحبكة. عند كتابة نهاية القصة، تجنّب النهايات النمطية والمعتادة مثل "وعاشوا بسعادة للأبد" أو "انتهى اليوم بكل سعادة" أو "منذ ذلك اليوم" أو "هكذا، ". بدلاً من ذلك، اختتم القصة بنهاية الأحداث فقط. ولا تصرح بالمغزى الأخلاقي للقصة.
+
+        أضف عنوان للقصة.
+        """
+
+        # Generate story using IBM ALLAM model
+        print("Submitting generation request to IBM ALLAM...")
+        story_response = allam_model.generate(prompt_template)  # Extract generated story text
+
+        # Assume `story_response` contains the generated story in a field called `generated_text`
+        generated_story = story_response['results'][0]['generated_text']
+        print(story_response)
+
+    except Exception as e:
+        return jsonify({'error': f"Story generation failed: {str(e)}"}), 500
+
+    return jsonify({'story': generated_story})
+
 
 
 # @api_blueprint.route('/api/story', methods=['POST'])
@@ -134,7 +178,7 @@ def generate_image():
         llm = ChatOpenAI(model="gpt-4", temperature=0.9)  # Update with your actual model if different
 
         # Create the prompt for generating an image
-        prompt_text = f"Generate a concise, detailed prompt (1000 characters or less) to generate an image, without any writing, with a sketch appearance, that is appropriate for kids, based on the following description: {image_desc}"
+        prompt_text = f"Generate a concise, detailed prompt (1000 characters or less) to generate an image, without any writing, with a illustration appearance, that is appropriate for kids, based on the following description: {image_desc}"
         
         # Generate the prompt response using the model
         response = llm.invoke([{"role": "user", "content": prompt_text}])
