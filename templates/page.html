@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Story Generator</title>
+  <style>
+  body {
+    background-image: url('pngs/qissabg.png'); 
+    background-repeat: repeat; /* repeat the background image */
+    background-size: auto; /* keep original image size for natural tiling */
+    background-position: top left; /* start tiling from the top-left corner */
+  }
+
+    main {
+    font-family: 'Comic Sans MS', 'Arial', sans-serif;
+    text-align: right;
+    direction: rtl;
+    padding: 20px;
+    background: linear-gradient(135deg, #ffd8a8 0%, #ff867c 100%); /*updated to create gradient*/
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+
+  .inner-container {
+    background-color: #f5f5f5; /* Light grey background */
+    padding: 20px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 700px; /* Smaller width than main */
+    margin: 0 auto; /* Center within main */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  }
+
+  h1 {
+    font-size: 2rem;
+    color: #ff6347;
+    text-shadow: 2px 2px 0px #ffe4e1;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  label {
+    font-size: 1.5rem;
+    color: #555;
+  }
+
+  input, textarea {
+    width: 100%;
+    font-size: 1.5rem;
+    padding: 15px;
+    margin: 10px 0;
+    box-sizing: border-box;
+    border-radius: 20px; /* Rounder input and textarea */
+    border: 2px solid #43bccd;
+    background-color: #fff;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+  }
+
+  /* Base styling for the dropdown */
+select {
+  appearance: none;
+  -webkit-appearance: none; /* For Safari */
+  -moz-appearance: none; /* For Firefox */
+  background-color: #f0f0f0;
+  color: #333;
+  font-size: 1.2rem;
+  padding: 12px 20px;
+  border: 2px solid #43bccd; /* Border color */
+  border-radius: 8px; /* Rounded corners */
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+/* Arrow for the dropdown */
+/* Container for consistent dropdown width */
+.select-container {
+  position: relative;
+  width: 100%; /* Adjust width to match other controls */
+  max-width: 400px;
+}
+
+/* Base styling for the dropdown */
+select {
+  appearance: none;
+  -webkit-appearance: none; /* For Safari */
+  -moz-appearance: none; /* For Firefox */
+  background-color: #f0f0f0;
+  color: #333;
+  font-size: 1.2rem;
+  padding: 12px 40px;
+  border: 2px solid #43bccd;
+  border-radius: 20px; /* Increased border-radius for rounder shape */
+  width: 100%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+/* Custom arrow for the dropdown */
+.select-container::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%) rotate(45deg);
+  width: 10px;
+  height: 10px;
+  border-left: 2px solid #333;
+  border-bottom: 2px solid #333;
+  pointer-events: none; /* Prevent arrow from blocking dropdown interaction */
+}
+
+/* Hover and focus effects */
+select:hover {
+  border-color: #3598a9;
+}
+ /* Styling for dropdown options hover */
+select option:hover {
+  background-color: #43bccd; /* Hover background color */
+  color: #fff; /* White text color for contrast */
+}
+select:focus {
+  outline: none;
+  border-color: #43bccd;
+  box-shadow: 0 0 0 3px rgba(67, 188, 205, 0.2);
+}
+
+
+
+  button {
+    font-size: 1.5rem;
+    padding: 10px 20px;
+    background-color: #43bccd; /* Blue button color */
+    color: white;
+    border: none;
+    border-radius: 20px; /* Rounder button */
+    cursor: pointer;
+    margin-top: 15px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, background-color 0.3s;
+  }
+
+  button:hover {
+    background-color: #3598a9;
+    transform: scale(1.05);
+  }
+
+  .story-output {
+    margin-top: 20px;
+    font-size: 1.75rem;
+    background-color: #fef5e7;
+    padding: 25px;
+    border-radius: 15px;
+    border: 2px dashed #ffb6c1;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  }
+
+  .logo-container {
+    text-align: center;
+    margin: 20px 0;
+  }
+
+  .logo {
+    max-width: 150px;
+    height: auto;
+  }
+
+  .loading-spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #888;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .pic {
+    max-width: 150px; /* Adjust to desired width */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 10px; /* Optional: Rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Subtle shadow for a polished look */
+    margin-top: 10px; /* Add space above the image */
+  }
+
+  .validation-message {
+      color: red;
+      margin-top: 10px;
+    }
+
+
+  </style>
+</head>
+<body class = "bg">
+
+<main x-data="storyGenerator()">
+  <div class="logo-container">
+    <img src="{{ url_for('static', filename='images/qissah-logo.png') }}" class="logo" alt="Logo">
+  </div>
+
+  <div class="inner-container">
+    <label for="theme">اختر موضوع القصة:</label>
+    <input type="text" x-model="theme" id="theme" placeholder="موضوع القصة..." />
+
+    <label for="characterType">نوع الشخصيات:</label>
+    <div class="select-container">
+      <select x-model="characterType">
+        <option value="human">بشر</option>
+        <option value="animal">حيوانات</option>
+        <option value="inanimate">جمادات</option>
+        <option value="other">أخرى</option>
+      </select>
+    </div>
+
+    <label for="characters-slider">عدد الشخصيات:</label>
+    <input type="range" id="characters-slider" min="1" max="5" step="1" x-model="characterCount" />
+    <div class="slider-value">عدد الشخصيات المختارة: <span x-text="characterCount"></span></div>
+
+    <label for="characters">أسماء الشخصيات:</label>
+    <input type="text" x-model="characters" id="characters" placeholder="أسماء الشخصيات..." />
+
+    <label for="storyLocation">مكان القصة:</label>
+    <input type="text" x-model="storyLocation" id="storyLocation" placeholder="مكان القصة..." />
+
+    <label for="storyMoral">القيم الأخلاقية للقصة:</label>
+    <input type="text" x-model="storyMoral" id="storyMoral" placeholder="القيم الأخلاقية..." />
+
+    <label for="otherThings">اضف عناصر أخرى:</label>
+    <textarea x-model="otherThings" id="otherThings" placeholder="عناصر أخرى..."></textarea>
+
+    <label for="imageDesc">وصف الصورة:</label>
+    <input type="text" x-model="imageDesc" id="imageDesc" placeholder="وصف الصورة..." />
+
+    <button @click="generateStoryAndImage">توليد القصة والصورة</button>
+    <div x-show="validationMessage" class="validation-message" x-text="validationMessage"></div>
+    <div x-show="loadingStory" class="loading-spinner"></div>
+    <template x-if="story && !loadingStory">
+      <div class="story-output">
+        <div x-show="loadingImage" class="loading-spinner"></div>
+        <template x-if="imagePath && !loadingImage">
+          <img class="pic" :src="imagePath" alt="Generated image">
+        </template>
+        <p x-text="story"></p>
+      </div>
+    </template>
+  </div>
+</main>
+
+<script>
+  function storyGenerator() {
+    return {
+      theme: '',
+      characterType: '',
+      characterCount: 1,
+      characters: '',
+      storyLocation: '',
+      storyMoral: '',
+      otherThings: '',
+      imageDesc: '',
+      story: '',
+      imagePath: '',
+      loadingStory: false,
+      loadingImage: false,
+      validationMessage: '', // New property for validation feedback
+
+      validateInputs() {
+        // Check if any required field is empty
+        if (!this.theme || !this.characterType || !this.characters || !this.storyLocation || !this.storyMoral || !this.imageDesc) {
+          this.validationMessage = 'يجب ملء جميع الحقول لتوليد القصة.';
+          return false;
+        }
+        this.validationMessage = ''; // Clear the message if validation passes
+        return true;
+      },
+
+      async getStory() {
+        this.loadingStory = true;
+        this.story = ''; // Clear previous story
+        try {
+          const response = await fetch('/api/story', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              theme: this.theme,
+              characterType: this.characterType,
+              characterCount: this.characterCount,
+              characters: this.characters,
+              storyLocation: this.storyLocation,
+              storyMoral: this.storyMoral,
+              otherThings: this.otherThings
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          this.story = data.story;
+        } catch (error) {
+          console.error('Error fetching story:', error);
+        } finally {
+          this.loadingStory = false;
+        }
+      },
+
+      async fetchImage() {
+        this.loadingImage = true;
+        this.imagePath = ''; // Clear previous image
+        try {
+          const response = await fetch('/api/generate_image', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ image_desc: this.imageDesc })
+          });
+
+          const data = await response.json();
+
+          if (data.image_url) {
+            this.imagePath = data.image_url;
+          } else {
+            console.error("Error generating image:", data.error);
+          }
+        } catch (error) {
+          console.error('Error fetching image:', error);
+        } finally {
+          this.loadingImage = false;
+        }
+      },
+
+      async generateStoryAndImage() {
+        // Validate inputs before proceeding
+        if (!this.validateInputs()) {
+          return; // Stop if validation fails
+        }
+        
+        await this.getStory();
+        await this.fetchImage();
+      }
+    };
+  }
+</script>
+
+
+</body>
+</html>
