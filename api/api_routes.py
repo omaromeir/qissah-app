@@ -35,85 +35,88 @@ allam_model = ModelInference(
 # Initialize a Sentence Transformer model for embeddings
 embedding_model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
 
-
-
 @api_blueprint.route('/api/story', methods=['POST'])
 def generate_story():
     try:
-        # Extract child input details from the request
-        data = request.get_json()
+
+
+# @api_blueprint.route('/api/story', methods=['POST'])
+# def generate_story_RAG():
+#     try:
+#         # Extract child input details from the request
+#         data = request.get_json()
         
-        # Check if necessary fields are provided
-        required_fields = ['theme', 'characterType', 'characterCount', 'characters', 'storyLocation', 'storyMoral', 'otherThings']
-        if not all(field in data for field in required_fields):
-            return jsonify({'error': 'Invalid request format, missing data'}), 400
+#         # Check if necessary fields are provided
+#         required_fields = ['theme', 'characterType', 'characterCount', 'characters', 'storyLocation', 'storyMoral', 'otherThings']
+#         if not all(field in data for field in required_fields):
+#             return jsonify({'error': 'Invalid request format, missing data'}), 400
 
-        # Extract inputs from the request
-        theme = data['theme']
-        characterType = data['characterType']
-        characterCount = data['characterCount']
-        characters = data['characters']
-        storyLocation = data['storyLocation']
-        storyMoral = data['storyMoral']
-        otherThings = data['otherThings']
+#         # Extract inputs from the request
+#         theme = data['theme']
+#         characterType = data['characterType']
+#         characterCount = data['characterCount']
+#         characters = data['characters']
+#         storyLocation = data['storyLocation']
+#         storyMoral = data['storyMoral']
+#         otherThings = data['otherThings']
 
-        # Construct retrieval query based on the child's input
-        retrieval_prompt = f"A story with {characterType} about {characters} in a {storyLocation}. The story should have the main theme: {theme} with moral: {storyMoral} or additional elements: {otherThings}."
+#         # Construct retrieval query based on the child's input
+#         retrieval_prompt = f"A story with {characterType} about {characters} in a {storyLocation}. The story should have the main theme: {theme} with moral: {storyMoral} or additional elements: {otherThings}."
         
-        # Generate an embedding for the retrieval query (modify as per model's retrieval function if needed)
-        query_embedding = embedding_model.encode(retrieval_prompt)  # ALLAM embedding for retrieval prompt
+#         # Generate an embedding for the retrieval query (modify as per model's retrieval function if needed)
+#         query_embedding = embedding_model.encode(retrieval_prompt)  # ALLAM embedding for retrieval prompt
 
-        # Retrieve relevant story chunks from ChromaDB
-        results = collection.query(
-            query_embeddings=[query_embedding],
-            n_results=3  # Retrieve top 3 similar story chunks
-        )
+#         # Retrieve relevant story chunks from ChromaDB
+#         results = collection.query(
+#             query_embeddings=[query_embedding],
+#             n_results=3  # Retrieve top 3 similar story chunks
+#         )
 
-        # Combine retrieved story chunks into a single context
-        retrieved_content = " ".join([doc for doc in results["documents"][0]])
+#         # Combine retrieved story chunks into a single context
+#         retrieved_content = " ".join([doc for doc in results["documents"][0]])
 
-        # Define the structured prompt template
-        prompt_template = PromptTemplate(
-            input_variables=["retrieved_content", "theme", "characterType", "characterCount", "characters", "storyLocation", "storyMoral", "otherThings"],
-            template="""
-            Based on the following input details:
-            - Main theme: {theme}
-            - Character Type: {characterType}
-            - Number of characters: {characterCount}
-            - Name of Characters: {characters}
-            - Setting: {storyLocation}
-            - Main Theme: {storyMoral}
-            - More details: {otherThings}
-            - Retrieved Content: {retrieved_content}
+#         # Define the structured prompt template
+#         prompt_template = PromptTemplate(
+#             input_variables=["retrieved_content", "theme", "characterType", "characterCount", "characters", "storyLocation", "storyMoral", "otherThings"],
+#             template="""
+#             Based on the following input details:
+#             - Main theme: {theme}
+#             - Character Type: {characterType}
+#             - Number of characters: {characterCount}
+#             - Name of Characters: {characters}
+#             - Setting: {storyLocation}
+#             - Main Theme: {storyMoral}
+#             - More details: {otherThings}
+#             - Retrieved Content: {retrieved_content}
             
-            Based on the input details provided, write a short Arabic story for children aged 8-11, emphasizing Arabic culture. Ensure it has a clear beginning, middle, and end, and conclude with a unique ending type.
-            """
-        )
+#             Based on the input details provided, write a short Arabic story for children aged 8-11, emphasizing Arabic culture. Ensure it has a clear beginning, middle, and end, and conclude with a unique ending type.
+#             """
+#         )
 
-        # Format the final prompt using PromptTemplate
-        formatted_prompt = prompt_template.format(
-            retrieved_content=retrieved_content,
-            theme=theme,
-            characterType=characterType,
-            characterCount=characterCount,
-            characters=characters,
-            storyLocation=storyLocation,
-            storyMoral=storyMoral,
-            otherThings=otherThings
-        )
+#         # Format the final prompt using PromptTemplate
+#         formatted_prompt = prompt_template.format(
+#             retrieved_content=retrieved_content,
+#             theme=theme,
+#             characterType=characterType,
+#             characterCount=characterCount,
+#             characters=characters,
+#             storyLocation=storyLocation,
+#             storyMoral=storyMoral,
+#             otherThings=otherThings
+#         )
 
-        # Generate story using IBM ALLAM model
-        print("Submitting generation request to IBM ALLAM...")
-        story_response = allam_model.generate(formatted_prompt)  # Extract generated story text
+#         # Generate story using IBM ALLAM model
+#         print("Submitting generation request to IBM ALLAM...")
+#         story_response = allam_model.generate(formatted_prompt)  # Extract generated story text
 
-        # Assume `story_response` contains the generated story in a field called `generated_text`
-        generated_story = story_response['results'][0]['generated_text']
-        print(story_response)
+#         # Assume `story_response` contains the generated story in a field called `generated_text`
+#         generated_story = story_response['results'][0]['generated_text']
+#         print(story_response)
 
-    except Exception as e:
-        return jsonify({'error': f"Story generation failed: {str(e)}"}), 500
+#     except Exception as e:
+#         return jsonify({'error': f"Story generation failed: {str(e)}"}), 500
 
-    return jsonify({'story': generated_story})
+#     return jsonify({'story': generated_story})
 
 
 @api_blueprint.route('/api/generate_image', methods=['POST'])
