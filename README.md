@@ -102,7 +102,7 @@ Access the application at `http://localhost:3000`.
 
 ---
 
-## Few-Shot Learning
+## Few-Shot Learning with Prompt Engineering and RAG
 
 The repository includes a Jupyter Notebook for models with Few-Shot Learning using Prompt Engineering and RAG:
 - File: `Integrated_RAG_ALLAM_Story_Generation_with_Prompt.ipynb`
@@ -140,7 +140,7 @@ To containerize and deploy the application:
 - **Vector Database**: ChromaDB
 - **Frontend (Optional)**: Svelte
 - **Containerization**: Docker
-- **Notebook**: Jupyter Notebook for Few-Shot Learning
+- **Notebook**: Jupyter Notebook for Few-Shot Learning with Prompt Engineering and RAG
 
 ---
 
