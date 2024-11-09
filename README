@@ -36,6 +36,7 @@ Qissah App is an innovative platform designed to generate and share Arabic child
 - **Firebase Account**: For database and authentication services.
 - **IBM WatsonX API Key**: For AI model integration.
 - **OpenAI API Key**: For DALL-E image generation.
+- **ChromaDB**: For vector database management and semantic search.
 
 ### Setup Instructions
 
