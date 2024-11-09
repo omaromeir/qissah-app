@@ -104,18 +104,13 @@ Access the application at `http://localhost:3000`.
 
 ## Few-Shot Learning
 
-The repository includes a Jupyter Notebook for fine-tuning models with Few-Shot Learning:
-- File: `FewShotLearning Notebook.ipynb`
-- Purpose: Demonstrates how to optimize machine learning models with minimal data.
+The repository includes a Jupyter Notebook for models with Few-Shot Learning using Prompt Engineering and RAG:
+- File: `Integrated_RAG_ALLAM_Story_Generation_with_Prompt.ipynb`
+- Purpose: Generate stories through ALLAM using Prompt Engineering and RAG.
 
 To run the notebook:
-1. Install the required libraries:
    ```bash
-   pip install -r requirements.txt
-   ```
-2. Launch the notebook:
-   ```bash
-   jupyter notebook "FewShotLearning Notebook.ipynb"
+   jupyter notebook "Integrated_RAG_ALLAM_Story_Generation_with_Prompt.ipynb"
    ```
 
 ---
@@ -171,7 +166,7 @@ Contributions are welcome! Follow these steps to contribute:
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under Sdaia
 
 ---
 
