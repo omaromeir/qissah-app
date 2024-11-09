@@ -1,13 +1,14 @@
 # Qissah App
 
-Qissah App is an innovative platform designed to generate and share Arabic children's stories. Leveraging ALLAM, it offers a unique storytelling experience that emphasizes Arabic culture and values.
+Qissah App is an innovative platform designed to generate and share Arabic children's stories. Leveraging **ALLAM** for story generation and **DALL-E** for image creation, it offers a unique storytelling experience that emphasizes Arabic culture and values.
 
 ---
 
 ## Features
 
-- **Story Generation**: Utilizes ALLAM to craft engaging stories tailored for children aged 8-11.
-- **Arabic Cultural Emphasis**: Ensures narratives are rich in Arabic traditions and morals.
+- **Story Generation**: Utilizes IBM WatsonX's ALLAM to craft engaging stories tailored for children aged 8-11.
+- **Image Generation**: Integrates DALL-E to create complementary images for stories.
+- **Arabic Cultural Emphasis**: Ensures narratives and visuals are rich in Arabic traditions and morals.
 - **User-Friendly Interface**: Provides an intuitive platform for users to generate and read stories.
 - **Customization**: Allows users to input specific characters, settings, and themes for personalized stories.
 
@@ -34,6 +35,7 @@ Qissah App is an innovative platform designed to generate and share Arabic child
 - **Node.js** (for frontend development)
 - **Firebase Account**: For database and authentication services.
 - **IBM WatsonX API Key**: For AI model integration.
+- **OpenAI API Key**: For DALL-E image generation.
 
 ### Setup Instructions
 
@@ -53,10 +55,11 @@ Qissah App is an innovative platform designed to generate and share Arabic child
      ```bash
      pip install -r requirements.txt
      ```
-   - Set up environment variables for Firebase and IBM WatsonX:
+   - Set up environment variables for Firebase, IBM WatsonX, and OpenAI:
      ```bash
      export FIREBASE_CREDENTIALS="path/to/firebase_credentials.json"
      export IBM_WATSONX_API_KEY="your_ibm_watsonx_api_key"
+     export OPENAI_API_KEY="your_openai_api_key"
      ```
    - Run the backend server:
      ```bash
@@ -92,8 +95,8 @@ Access the application at `http://localhost:3000`.
 
 ### Key Features
 
-- **Root Route** (`/`): Serves the main application.
-- **Static Files** (`/static/<filename>`): Hosts assets like JavaScript or images.
+- **Story Generation**: Input characters, settings, and themes to generate a story with ALLAM.
+- **Image Creation**: Use DALL-E to generate images that match the story.
 - **Few-Shot Learning Notebook**: Explore `FewShotLearning Notebook.ipynb` for examples of model fine-tuning.
 
 ---
@@ -137,7 +140,8 @@ To containerize and deploy the application:
 ## Technologies Used
 
 - **Backend**: Flask, Python
-- **ML Integration**: LangChain, OpenAI
+- **ML Integration**: LangChain, IBM WatsonX ALLAM, OpenAI DALL-E
+- **Vector Database**: ChromaDB
 - **Frontend (Optional)**: Svelte
 - **Containerization**: Docker
 - **Notebook**: Jupyter Notebook for Few-Shot Learning
@@ -175,4 +179,3 @@ This project is licensed under the [MIT License](LICENSE).
 For inquiries or support, contact:
 - **Email**: your-email@example.com
 - **GitHub**: [omaromeir](https://github.com/omaromeir)
-
