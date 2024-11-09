@@ -178,5 +178,4 @@ This project is licensed under the [MIT License](LICENSE).
 ## Contact
 
 For inquiries or support, contact:
-- **Email**: your-email@example.com
 - **GitHub**: [omaromeir](https://github.com/omaromeir)
